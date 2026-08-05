@@ -76,7 +76,6 @@ html { scroll-behavior: smooth; }
   --green:        #34D399;
   --font:         Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
   --font-display: 'Avenir Next', 'Century Gothic', 'Segoe UI', system-ui, -apple-system, sans-serif;
-  --font-huge:    'Bahnschrift', 'Roboto Condensed', 'Arial Narrow', 'Helvetica Neue', Arial, sans-serif;
   --font-mono:    'SF Mono', 'Consolas', 'Liberation Mono', Menlo, monospace;
   --transition:   0.25s ease;
   --radius:       12px;
@@ -100,65 +99,61 @@ body {
 }
 a { color: inherit; text-decoration: none; }
 img { max-width: 100%; display: block; }
+a:focus-visible, button:focus-visible, input:focus-visible {
+  outline: 2px solid var(--accent-light); outline-offset: 3px; border-radius: 2px;
+}
 h1, h2, h3, .hero-name, .section-title {
-  font-family: var(--font-huge); letter-spacing: -0.01em;
+  font-family: var(--font); letter-spacing: -0.01em; text-wrap: balance;
 }
 .leistung-title, .timeline-role, .nav-logo { font-family: var(--font-display); letter-spacing: -0.01em; }
 .eyebrow-mono, .section-eyebrow, .titleblock-tag { font-family: var(--font-mono); }
 
 /* =============================================
-   MARQUEE / SCROLLING TICKER (Haus-of-Words-Stil)
+   STATEMENT-BLOCK — großer zentrierter Textblock
    ============================================= */
-.marquee-wrap {
-  overflow: hidden; width: 100%;
-  -webkit-mask-image: linear-gradient(90deg, transparent, black 6%, black 94%, transparent);
-  mask-image: linear-gradient(90deg, transparent, black 6%, black 94%, transparent);
+#statement { background: var(--gray-light); }
+.statement-inner { max-width: 700px; }
+.statement-headline {
+  font-family: var(--font);
+  font-size: clamp(1.9rem, 4vw, 2.85rem); line-height: 1.15;
+  font-weight: 700; color: var(--navy); letter-spacing: -0.005em;
+  margin-bottom: 24px;
 }
-.marquee-track {
-  display: flex; align-items: center; gap: 10px; width: max-content;
-  animation: marquee 32s linear infinite;
+.statement-body {
+  font-family: var(--font); font-size: 1rem;
+  line-height: 1.75; color: var(--gray-mid); max-width: 640px; margin-bottom: 24px;
 }
-.marquee-track.reverse { animation-direction: reverse; animation-duration: 26s; }
-.marquee-wrap:hover .marquee-track { animation-play-state: paused; }
-@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-@media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } }
 
 /* =============================================
-   HORIZONTAL SCROLL-JACK SECTION (Haus-of-Words-Stil)
+   ERGEBNISSE — zentrierte Nummern-Liste
    ============================================= */
-.hscroll-outer { position: relative; }
-.hscroll-sticky {
-  position: sticky; top: 0; height: 100vh;
-  display: flex; align-items: center; overflow: hidden;
+#ergebnisse { background: var(--white); }
+.ergebnis-list { max-width: 640px; margin: 0 auto; text-align: center; }
+.ergebnis-item {
+  padding: 32px 0; border-bottom: 1px solid var(--steel);
 }
-.hscroll-track {
-  display: flex; gap: 24px; will-change: transform;
-  padding: 0 5%;
+.ergebnis-item:last-child { border-bottom: none; }
+.ergebnis-num {
+  display: block; font-family: var(--font-mono); font-size: 0.75rem;
+  font-weight: 700; letter-spacing: 0.15em; color: var(--accent);
+  margin-bottom: 10px;
 }
-.hscroll-progress {
-  position: absolute; left: 5%; right: 5%; bottom: 40px; height: 2px;
-  background: rgba(255,255,255,0.15); z-index: 2;
+.ergebnis-title {
+  font-family: var(--font);
+  font-size: clamp(1.3rem, 2.4vw, 1.7rem); font-weight: 700; color: var(--navy);
+  line-height: 1.2; margin-bottom: 8px; letter-spacing: -0.005em;
 }
-.hscroll-progress-fill {
-  height: 100%; background: var(--accent-light); width: 0%;
-  transition: width 0.05s linear;
-}
-@media (max-width: 768px) {
-  .hscroll-sticky { position: static; height: auto; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
-  .hscroll-track { transform: none !important; }
-  .hscroll-track .referenz-card { scroll-snap-align: start; }
-  .hscroll-progress { display: none; }
-}
+.ergebnis-desc { color: var(--gray-mid); font-size: 0.95rem; line-height: 1.6; max-width: 480px; margin: 0 auto; }
 
 /* Scroll Animation Base */
 .reveal {
   opacity: 0;
-  transform: translateY(36px) scale(0.97);
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
 }
 .reveal.visible {
   opacity: 1;
-  transform: translateY(0) scale(1);
+  transform: translateY(0);
 }
 .reveal-delay-1 { transition-delay: 0.1s; }
 .reveal-delay-2 { transition-delay: 0.2s; }
@@ -289,6 +284,13 @@ nav.scrolled .nav-logo-word { font-size: 0.72rem; }
   pointer-events: none;
 }
 
+/* P&ID-Skizze als dezenter Hintergrund im Hero */
+.hero-pid-bg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  pointer-events: none; opacity: 0.22; z-index: 0;
+}
+@media (max-width: 768px) { .hero-pid-bg { opacity: 0.16; } }
+
 .hero-inner {
   max-width: 1200px; margin: 0 auto; width: 100%;
   display: grid; grid-template-columns: 1fr 340px; gap: 80px; align-items: center;
@@ -324,27 +326,29 @@ nav.scrolled .nav-logo-word { font-size: 0.72rem; }
 }
 .hero-titleblock span:last-child { border-right: none; }
 .hero-name {
-  font-size: clamp(3.6rem, 9vw, 7.8rem);
-  font-weight: 800; color: var(--white);
-  line-height: 0.9; margin-bottom: 0;
-  letter-spacing: -0.01em;
-  text-transform: uppercase;
+  font-size: clamp(2.75rem, 5.6vw, 4.6rem);
+  font-weight: 700; color: var(--white);
+  line-height: 1.05; margin-bottom: 2px;
+  letter-spacing: -0.005em;
   display: block;
 }
 .hero-degree {
   display: block;
-  font-size: 1rem; font-weight: 400;
-  color: rgba(255,255,255,0.4); letter-spacing: 0.04em;
-  margin-bottom: 6px; margin-top: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem; font-weight: 400;
+  color: rgba(255,255,255,0.4); letter-spacing: 0.06em; text-transform: uppercase;
+  margin-bottom: 26px; margin-top: 10px;
 }
 .hero-subtitle {
-  font-size: clamp(1rem, 2vw, 1.2rem);
-  color: var(--accent-light); font-weight: 500;
-  margin-bottom: 28px; letter-spacing: 0.01em;
+  font-family: var(--font); font-style: italic;
+  font-size: clamp(1.25rem, 2.4vw, 1.65rem);
+  color: var(--accent-light); font-weight: 400;
+  line-height: 1.4;
+  margin-bottom: 26px; letter-spacing: 0; max-width: 560px;
 }
 .hero-desc {
-  color: rgba(255,255,255,0.65); font-size: 0.975rem;
-  line-height: 1.85; max-width: 520px; margin-bottom: 36px;
+  color: rgba(255,255,255,0.65); font-size: 1rem;
+  line-height: 1.8; max-width: 520px; margin-bottom: 36px;
 }
 .hero-meta {
   display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 40px;
@@ -476,32 +480,47 @@ section[id] { scroll-margin-top: 100px; }
 section { padding: 100px 5%; }
 .section-inner { max-width: 1200px; margin: 0 auto; }
 .section-eyebrow {
-  text-transform: uppercase; letter-spacing: 0.12em;
+  text-transform: uppercase; letter-spacing: 0.1em;
   font-family: var(--font-mono);
-  font-size: 0.68rem; color: var(--accent); font-weight: 500;
-  margin-bottom: 14px; display: inline-flex; align-items: center; gap: 8px;
-  border: 1px solid var(--accent); padding: 4px 12px; border-radius: var(--radius-pill);
+  font-size: 0.78rem; color: var(--accent); font-weight: 700;
+  margin-bottom: 20px; display: flex; align-items: center; gap: 14px;
+  width: 100%; max-width: 620px;
 }
-.section-eyebrow::before { content: '#'; opacity: 0.6; }
+.section-eyebrow::after { content: ''; flex: 1; height: 1px; background: var(--steel); }
 .section-title {
-  font-size: clamp(2.1rem, 4.4vw, 3.6rem);
-  font-weight: 800; color: var(--navy);
-  line-height: 1; margin-bottom: 14px;
-  letter-spacing: -0.01em;
-  text-transform: uppercase;
+  font-family: var(--font); font-weight: 700; color: var(--navy);
+  font-size: clamp(2rem, 4vw, 3.15rem);
+  line-height: 1.1; margin-bottom: 20px;
+  letter-spacing: -0.005em;
 }
 .section-subtitle {
-  color: var(--gray-mid); font-size: 0.975rem;
-  max-width: 540px; line-height: 1.75; margin-bottom: 56px;
+  color: var(--gray-mid); font-size: 1.0625rem;
+  max-width: 560px; line-height: 1.7; margin-bottom: 64px;
 }
-.section-head { margin-bottom: 56px; }
+.section-head { margin-bottom: 64px; }
 
 /* =============================================
    AKTUELLE PROJEKTE
    ============================================= -->
 <!-- UPDATE: Projektstatus, Phasen und IBN-Daten hier verwalten -->
    ============================================= */
-#projekte { background: var(--gray-light); }
+#projekte { background: var(--gray-light); position: relative; overflow: hidden; }
+#projekte .section-inner { position: relative; z-index: 1; }
+.projekte-bg-matrix {
+  position: absolute; inset: 0;
+  display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(5, minmax(90px, 1fr));
+  z-index: 0; opacity: 0.45;
+}
+.projekte-bg-matrix span {
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  font-family: var(--font-mono); font-size: 0.66rem; font-weight: 700;
+  letter-spacing: 0.02em; line-height: 1.3; padding: 10px;
+  color: rgba(31,61,46,0.3);
+}
+.matrix-bg-low { background: #E7EFE3; }
+.matrix-bg-mid { background: #F3EADB; }
+.matrix-bg-high { background: #EEDFD5; }
+@media (max-width: 900px) { .projekte-bg-matrix { display: none; } }
 
 .projekte-grid {
   display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
@@ -509,7 +528,7 @@ section { padding: 100px 5%; }
 }
 .projekt-card {
   background: var(--white); border-radius: var(--radius);
-  border: 1px solid #EDE7D8;
+  border: 1px solid #EDE7D8; box-shadow: var(--shadow-md);
   padding: 26px;
   transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
   position: relative; overflow: hidden;
@@ -524,8 +543,14 @@ section { padding: 100px 5%; }
 .projekt-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); border-color: var(--steel); }
 .projekt-card:hover::before { transform: scaleX(1); }
 
-.projekt-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
-.projekt-name { font-size: 1.05rem; font-weight: 700; color: var(--navy); }
+.projekt-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+.projekt-header { flex-wrap: wrap; row-gap: 10px; }
+.projekt-name {
+  font-size: 1.05rem; font-weight: 700; color: var(--navy);
+  min-width: 0; flex-basis: 100%; hyphens: auto; -webkit-hyphens: auto;
+  overflow-wrap: break-word; line-height: 1.3;
+}
+.status-badge { flex-shrink: 0; }
 
 .status-badge {
   display: inline-flex; align-items: center; gap: 5px;
@@ -596,6 +621,19 @@ section { padding: 100px 5%; }
    LEISTUNGEN
    ============================================= */
 #leistungen { background: var(--white); }
+.hazop-mini-flow { margin: 4px 0 18px; padding-top: 14px; border-top: 1px dashed var(--steel); }
+.hazop-mini-label {
+  display: block; font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px;
+}
+.hazop-mini-steps { display: flex; flex-wrap: wrap; align-items: center; gap: 5px 6px; }
+.hazop-mini-steps span:not(.hazop-mini-arrow) {
+  font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700;
+  color: var(--navy); background: var(--gray-light); border-radius: 4px;
+  padding: 4px 8px; white-space: nowrap;
+}
+.hazop-mini-arrow { color: var(--accent); font-weight: 700; }
+
 .leistungen-grid {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;
 }
@@ -645,6 +683,7 @@ section { padding: 100px 5%; }
 #werdegang { background: var(--navy); }
 #werdegang .section-title { color: var(--white); }
 #werdegang .section-eyebrow { color: var(--accent-light); }
+#werdegang .section-eyebrow::after { background: rgba(255,255,255,0.15); }
 #werdegang .section-subtitle { color: rgba(255,255,255,0.5); }
 
 .timeline { position: relative; }
@@ -733,29 +772,19 @@ section { padding: 100px 5%; }
    ============================================= -->
 <!-- UPDATE: Neue Referenzen als .referenz-card Block hinzufügen -->
    ============================================= */
-#referenzen { background: var(--white); padding-bottom: 0; }
-#referenzenScroll { height: 260vh; background: var(--navy); }
-.hscroll-track .referenz-card {
-  width: min(440px, 82vw); flex-shrink: 0;
-}
+#referenzen { background: var(--white); }
 .referenz-grid {
   display: grid; grid-template-columns: repeat(3, 1fr);
   gap: 24px; align-items: stretch;
 }
 .referenz-card {
-  background: rgba(255,255,255,0.06); border-radius: var(--radius);
-  padding: 34px 30px; position: relative;
-  border-left: 4px solid var(--accent-light);
+  background: var(--gray-light); border-radius: var(--radius);
+  padding: 30px 26px; position: relative;
+  border-left: 4px solid var(--accent);
   transition: transform var(--transition), box-shadow var(--transition);
   display: flex; flex-direction: column; height: 100%;
-  backdrop-filter: blur(8px);
 }
-.referenz-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
-.hscroll-outer .referenz-author { color: var(--white); }
-.hscroll-outer .referenz-text { color: rgba(255,255,255,0.7); }
-.hscroll-outer .referenz-footer { border-top-color: rgba(255,255,255,0.15); }
-.hscroll-outer .referenz-company { color: rgba(255,255,255,0.5); }
-#referenzen .section-subtitle { margin-bottom: 0; }
+.referenz-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
 .referenz-quote {
   font-size: 3.5rem; color: var(--accent); line-height: 0.8;
   font-family: Georgia, serif; margin-bottom: 14px; opacity: 0.35;
@@ -795,6 +824,7 @@ section { padding: 100px 5%; }
 }
 #kontakt .section-inner { position: relative; z-index: 1; }
 #kontakt .section-eyebrow { color: var(--accent-light); }
+#kontakt .section-eyebrow::after { background: rgba(255,255,255,0.15); }
 #kontakt .section-title { color: var(--white); }
 #kontakt .section-subtitle { color: rgba(255,255,255,0.5); margin: 0 auto 56px; }
 
@@ -883,7 +913,6 @@ footer {
 /* iPad Portrait 768px–1024px */
 @media (min-width: 769px) and (max-width: 1024px) {
   .hero-inner { grid-template-columns: 1fr 280px; gap: 48px; }
-  .hero-name { font-size: clamp(2.2rem, 4vw, 3rem); }
   .leistungen-grid { grid-template-columns: 1fr 1fr; }
   .referenz-grid { grid-template-columns: repeat(3, 1fr); }
   .qual-grid { grid-template-columns: 1fr 1fr; }
@@ -998,6 +1027,92 @@ footer {
      HERO
      ============================================= -->
 <section id="hero">
+  <svg class="hero-pid-bg" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <g id="sym-valve" fill="none" stroke="var(--accent-light)" stroke-width="1.25">
+        <path d="M-16,-11 L0,0 L-16,11 Z M16,-11 L0,0 L16,11 Z"/>
+      </g>
+      <g id="sym-tank" fill="none" stroke="var(--accent-light)" stroke-width="1.25">
+        <rect x="-18" y="-38" width="36" height="76" rx="5"/>
+        <path d="M-18,-8 H18"/>
+      </g>
+      <g id="sym-arrow" fill="none" stroke="var(--accent-light)" stroke-width="1.25">
+        <path d="M-20,0 H16 M16,0 L6,-8 M16,0 L6,8"/>
+      </g>
+      <g id="sym-gauge" fill="none" stroke="var(--accent-light)" stroke-width="1.25">
+        <circle cx="0" cy="0" r="20"/>
+        <path d="M0,0 L10,-12"/>
+        <path d="M0,-20 V-24 M0,20 V24 M-20,0 H-24 M20,0 H24"/>
+      </g>
+      <g id="sym-tee" fill="none" stroke="var(--accent-light)" stroke-width="1.25">
+        <path d="M-24,0 H24 M0,0 V22"/>
+      </g>
+      <g id="sym-pump" fill="none" stroke="var(--accent-light)" stroke-width="1.25">
+        <circle cx="0" cy="0" r="18"/>
+        <path d="M-8,-9 L10,0 L-8,9 Z"/>
+      </g>
+      <g id="sym-hx" fill="none" stroke="var(--accent-light)" stroke-width="1.25">
+        <rect x="-24" y="-14" width="48" height="28" rx="3"/>
+        <path d="M-18,0 L-10,-8 L-2,8 L6,-8 L14,8 L20,0"/>
+      </g>
+      <g id="sym-check" fill="none" stroke="var(--accent-light)" stroke-width="1.25">
+        <path d="M-14,-12 L14,0 L-14,12 Z"/>
+        <path d="M14,-12 V12"/>
+      </g>
+      <g id="sym-filter" fill="none" stroke="var(--accent-light)" stroke-width="1.25">
+        <path d="M-14,-16 H14 L4,16 H-4 Z"/>
+        <path d="M-9,-8 H9 M-6,0 H6"/>
+      </g>
+      <g id="sym-instrument-shape" fill="none" stroke="var(--accent-light)" stroke-width="1.1">
+        <ellipse cx="0" cy="0" rx="24" ry="16"/>
+        <path d="M-24,0 H24"/>
+      </g>
+    </defs>
+
+    <use href="#sym-tank" x="90" y="90" transform="rotate(4 90 90)"/>
+    <use href="#sym-valve" x="230" y="60" transform="rotate(18 230 60)"/>
+    <g transform="translate(360 130)"><use href="#sym-instrument-shape"/><text y="-4" text-anchor="middle" font-family="var(--font-mono)" font-size="9" fill="var(--accent-light)" font-weight="bold">PT</text><text y="12" text-anchor="middle" font-family="var(--font-mono)" font-size="9" fill="var(--accent-light)" font-weight="bold">101</text></g>
+    <use href="#sym-arrow" x="480" y="70" transform="rotate(20 480 70)"/>
+    <use href="#sym-gauge" x="640" y="110" transform="scale(0.85) translate(90 20)"/>
+    <use href="#sym-tee" x="770" y="60"/>
+    <use href="#sym-pump" x="850" y="150" transform="rotate(-10 850 150)"/>
+    <use href="#sym-valve" x="900" y="130" transform="rotate(-22 900 130) scale(0.85)"/>
+    <use href="#sym-hx" x="1000" y="60" transform="rotate(3 1000 60)"/>
+    <g transform="translate(1140 190)"><use href="#sym-instrument-shape"/><text y="-4" text-anchor="middle" font-family="var(--font-mono)" font-size="9" fill="var(--accent-light)" font-weight="bold">PI</text><text y="12" text-anchor="middle" font-family="var(--font-mono)" font-size="9" fill="var(--accent-light)" font-weight="bold">102</text></g>
+
+    <use href="#sym-arrow" x="60" y="260" transform="rotate(-30 60 260)"/>
+    <g transform="translate(220 290)"><use href="#sym-instrument-shape"/><text y="-4" text-anchor="middle" font-family="var(--font-mono)" font-size="9" fill="var(--accent-light)" font-weight="bold">TT</text><text y="12" text-anchor="middle" font-family="var(--font-mono)" font-size="9" fill="var(--accent-light)" font-weight="bold">204</text></g>
+    <use href="#sym-tee" x="400" y="250" transform="rotate(90 400 250)"/>
+    <use href="#sym-check" x="500" y="300" transform="rotate(8 500 300)"/>
+    <use href="#sym-valve" x="600" y="300" transform="rotate(8 600 300)"/>
+    <use href="#sym-gauge" x="720" y="260"/>
+    <use href="#sym-filter" x="830" y="310" transform="rotate(-8 830 310)"/>
+    <use href="#sym-tank" x="930" y="290" transform="rotate(-10 930 290) scale(0.85)"/>
+    <use href="#sym-arrow" x="1040" y="240" transform="rotate(15 1040 240)"/>
+    <g transform="translate(1160 340)"><use href="#sym-instrument-shape"/><text y="-4" text-anchor="middle" font-family="var(--font-mono)" font-size="9" fill="var(--accent-light)" font-weight="bold">LI</text><text y="12" text-anchor="middle" font-family="var(--font-mono)" font-size="9" fill="var(--accent-light)" font-weight="bold">306</text></g>
+
+    <use href="#sym-valve" x="120" y="430" transform="rotate(-18 120 430)"/>
+    <g transform="translate(280 470)"><use href="#sym-instrument-shape"/><text y="-4" text-anchor="middle" font-family="var(--font-mono)" font-size="9" fill="var(--accent-light)" font-weight="bold">LT</text><text y="12" text-anchor="middle" font-family="var(--font-mono)" font-size="9" fill="var(--accent-light)" font-weight="bold">305</text></g>
+    <use href="#sym-hx" x="400" y="420" transform="rotate(-4 400 420) scale(0.85)"/>
+    <use href="#sym-arrow" x="560" y="470" transform="rotate(-15 560 470)"/>
+    <use href="#sym-tee" x="700" y="430"/>
+    <use href="#sym-pump" x="800" y="480" transform="rotate(12 800 480)"/>
+    <use href="#sym-gauge" x="900" y="470" transform="scale(0.85) translate(150 60)"/>
+    <use href="#sym-valve" x="1030" y="420" transform="rotate(20 1030 420)"/>
+    <g transform="translate(1180 480)"><use href="#sym-instrument-shape"/><text y="-4" text-anchor="middle" font-family="var(--font-mono)" font-size="9" fill="var(--accent-light)" font-weight="bold">PDT</text><text y="12" text-anchor="middle" font-family="var(--font-mono)" font-size="9" fill="var(--accent-light)" font-weight="bold">08</text></g>
+
+    <use href="#sym-arrow" x="80" y="600" transform="rotate(35 80 600)"/>
+    <g transform="translate(240 620)"><use href="#sym-instrument-shape"/><text y="-4" text-anchor="middle" font-family="var(--font-mono)" font-size="9" fill="var(--accent-light)" font-weight="bold">FT</text><text y="12" text-anchor="middle" font-family="var(--font-mono)" font-size="9" fill="var(--accent-light)" font-weight="bold">412</text></g>
+    <use href="#sym-check" x="340" y="580" transform="rotate(-6 340 580)"/>
+    <use href="#sym-valve" x="420" y="590" transform="rotate(10 420 590)"/>
+    <use href="#sym-tank" x="560" y="630" transform="rotate(-4 560 630) scale(0.85)"/>
+    <use href="#sym-filter" x="680" y="580" transform="rotate(6 680 580)"/>
+    <use href="#sym-tee" x="740" y="600" transform="rotate(90 740 600)"/>
+    <use href="#sym-gauge" x="900" y="610"/>
+    <use href="#sym-hx" x="1010" y="640" transform="rotate(-3 1010 640)"/>
+    <use href="#sym-arrow" x="1050" y="590" transform="rotate(-25 1050 590)"/>
+    <g transform="translate(1170 630)"><use href="#sym-instrument-shape"/><text y="-4" text-anchor="middle" font-family="var(--font-mono)" font-size="9" fill="var(--accent-light)" font-weight="bold">TI</text><text y="12" text-anchor="middle" font-family="var(--font-mono)" font-size="9" fill="var(--accent-light)" font-weight="bold">413</text></g>
+  </svg>
   <div class="hero-inner">
     <div class="hero-text">
 
@@ -1065,16 +1180,59 @@ footer {
 </section>
 
 <!-- =============================================
+     ERGEBNISSE — Diagonale Nummern-Liste
+     ============================================= -->
+<section id="ergebnisse">
+  <div class="section-inner">
+    <div class="section-head reveal">
+      <p class="section-eyebrow">§ 01 — Das Ergebnis</p>
+      <h2 class="section-title">3 Dinge, die sich für dich ändern</h2>
+    </div>
+
+    <div class="ergebnis-list">
+      <div class="ergebnis-item reveal">
+        <span class="ergebnis-num">01</span>
+        <div class="ergebnis-body">
+          <h3 class="ergebnis-title">Keine Überraschungen.</h3>
+          <p class="ergebnis-desc">Deine HAZOP-Studie ist nach DIN EN 61882 dokumentiert und hält jeder Behördenprüfung stand.</p>
+        </div>
+      </div>
+      <div class="ergebnis-item reveal reveal-delay-1">
+        <span class="ergebnis-num">02</span>
+        <div class="ergebnis-body">
+          <h3 class="ergebnis-title">Zeit zurück.</h3>
+          <p class="ergebnis-desc">Die Projektleitung läuft — von der Detailplanung bis zur Inbetriebnahme —, während du dich um den Rest kümmerst.</p>
+        </div>
+      </div>
+      <div class="ergebnis-item reveal reveal-delay-2">
+        <span class="ergebnis-num">03</span>
+        <div class="ergebnis-body">
+          <h3 class="ergebnis-title">Genehmigt, nicht vertröstet.</h3>
+          <p class="ergebnis-desc">Sicherheitsrelevante Fragen sind geklärt, bevor sie zum Show-Stopper vor der Inbetriebnahme werden.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
      AKTUELLE PROJEKTE
      UPDATE: Status ändern zwischen status-aktiv / status-abgeschlossen
      UPDATE: Fortschrittsbalken width in % im data-width Attribut
      ============================================= -->
 <section id="projekte">
+  <div class="projekte-bg-matrix" aria-hidden="true">
+    <span class="matrix-bg-mid">Keine PLT-Maßnahmen</span><span class="matrix-bg-high">Design Änderung SIL 1</span><span class="matrix-bg-high">Design Änderung SIL 3</span><span class="matrix-bg-high">Design Änderung SIL 4</span><span class="matrix-bg-high">Design Änderung SIL 4</span>
+    <span class="matrix-bg-mid">Keine PLT-Maßnahmen</span><span class="matrix-bg-mid">Control System notwendig</span><span class="matrix-bg-high">SIL 2</span><span class="matrix-bg-high">SIL 3</span><span class="matrix-bg-high">Design Änderung SIL 4</span>
+    <span class="matrix-bg-low">Keine PLT-Maßnahmen</span><span class="matrix-bg-mid">Control System notwendig</span><span class="matrix-bg-mid">SIL 1</span><span class="matrix-bg-high">SIL 2</span><span class="matrix-bg-high">SIL 3</span>
+    <span class="matrix-bg-low">Keine PLT-Maßnahmen</span><span class="matrix-bg-low">Keine PLT-Maßnahmen</span><span class="matrix-bg-mid">SIL 1</span><span class="matrix-bg-mid">SIL 2</span><span class="matrix-bg-high">SIL 3</span>
+    <span class="matrix-bg-low">Keine PLT-Maßnahmen</span><span class="matrix-bg-low">Keine PLT-Maßnahmen</span><span class="matrix-bg-low">Keine PLT-Maßnahmen</span><span class="matrix-bg-mid">SIL 1</span><span class="matrix-bg-mid">SIL 2</span>
+  </div>
   <div class="section-inner">
     <div class="section-head reveal">
-      <p class="section-eyebrow">Aktuell</p>
+      <p class="section-eyebrow">§ 02 — Aktuell</p>
       <h2 class="section-title">Aktuelle Tätigkeit</h2>
-      <p class="section-subtitle">90% Anstellung bei Nowega, parallel freiberuflich für Auftraggeber in der Gasinfrastruktur.</p>
+      <p class="section-subtitle">Fest angestellt bei einem Energieversorgungsunternehmen, parallel freiberuflich für Auftraggeber in der Gasinfrastruktur.</p>
     </div>
 
     <div class="projekte-grid">
@@ -1094,12 +1252,12 @@ footer {
 
       <div class="projekt-card reveal reveal-delay-1">
         <div class="projekt-header">
-          <span class="projekt-name">Nowega GmbH</span>
+          <span class="projekt-name">Energieversorgungsunternehmen</span>
           <span class="status-badge status-aktiv"><span class="dot"></span>Aktiv</span>
         </div>
         <p class="projekt-desc">Projektingenieur für Biogaseinspeiseanlagen — Detailplanung, Genehmigung, Inbetriebnahme.</p>
         <div class="projekt-meta">
-          <div class="projekt-meta-item"><strong>Rolle</strong> Projektingenieur (90%)</div>
+          <div class="projekt-meta-item"><strong>Rolle</strong> Projektingenieur (Festanstellung)</div>
           <div class="projekt-meta-item"><strong>Status</strong> Angestellt</div>
           <div class="projekt-meta-item"><strong>Branche</strong> Biogasinfrastruktur</div>
         </div>
@@ -1116,7 +1274,7 @@ footer {
 <section id="ausgangslage">
   <div class="section-inner">
     <div class="section-head reveal">
-      <p class="section-eyebrow">Ausgangslage</p>
+      <p class="section-eyebrow">§ 03 — Ausgangslage</p>
       <h2 class="section-title">Anlagensicherheit ist Pflicht — nicht immer ist die Kapazität dafür intern vorhanden</h2>
     </div>
     <div class="ausgangslage-grid">
@@ -1140,7 +1298,7 @@ footer {
 <section id="leistungen">
   <div class="section-inner">
     <div class="section-head reveal">
-      <p class="section-eyebrow">Leistungen</p>
+      <p class="section-eyebrow">§ 04 — Leistungen</p>
       <h2 class="section-title">Was ich anbiete</h2>
       <p class="section-subtitle">Drei Leistungen, die zusammen den Lebenszyklus eines Anlagenprojekts abdecken — von der Planung bis zur Prüfung.</p>
     </div>
@@ -1157,6 +1315,12 @@ footer {
         </div>
         <h3 class="leistung-title">HAZOP-Moderation &amp; Anlagensicherheit</h3>
         <p class="leistung-desc">Moderation von HAZOP/PAAG-Studien für Prozessanlagen aller Art nach DIN EN 61882 — Schwerpunkt Biogas- und Wasserstoffinfrastruktur. Inkl. SIL-Klassifizierung über LOPA.</p>
+        <div class="hazop-mini-flow" role="img" aria-label="Ablauf der HAZOP-Analyse: Ursache führt zu Abweichung, führt zu Auswirkung, wird durch Schutzmaßnahme abgefangen">
+          <span class="hazop-mini-label">Der Ablauf je Analysepunkt</span>
+          <div class="hazop-mini-steps">
+            <span>Ursache</span><span class="hazop-mini-arrow" aria-hidden="true">→</span><span>Abweichung</span><span class="hazop-mini-arrow" aria-hidden="true">→</span><span>Auswirkung</span><span class="hazop-mini-arrow" aria-hidden="true">→</span><span>Schutzmaßnahme</span>
+          </div>
+        </div>
         <ul class="leistung-list">
           <li>HAZOP/PAAG nach DIN EN 61882</li>
           <li>SIL-Klassifizierung (LOPA) nach IEC 61511</li>
@@ -1207,13 +1371,34 @@ footer {
 </section>
 
 <!-- =============================================
+     STATEMENT — Großer freistehender Textblock
+     ============================================= -->
+<section id="statement">
+  <div class="section-inner">
+    <div class="statement-inner">
+      <p class="section-eyebrow reveal">§ 05 — Haltung</p>
+      <h2 class="statement-headline reveal">Sicherheit ist kein Nachtrag.</h2>
+      <p class="statement-body reveal reveal-delay-1">
+        Anlagen, die durch die Genehmigung kommen, tun das nicht durch Zufall. Wer HAZOP,
+        SIL-Klassifizierung und Genehmigungsprozess von Anfang an mitdenkt, spart sich teure
+        Nachbesserungen kurz vor der Inbetriebnahme — und die Diskussion mit der Behörde erst recht.
+      </p>
+      <p class="statement-body reveal reveal-delay-2">
+        Genau da setze ich an: als unabhängiger Moderator, Prüfer und Projektleiter in einer Person.
+      </p>
+      <a href="#kontakt" class="btn-primary reveal reveal-delay-3">Projekt besprechen</a>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
      WERDEGANG TIMELINE
      UPDATE: Neue Station als .timeline-item Block hinzufügen
      ============================================= -->
 <section id="werdegang">
   <div class="section-inner">
     <div class="section-head reveal">
-      <p class="section-eyebrow">Erfahrung</p>
+      <p class="section-eyebrow">§ 06 — Erfahrung</p>
       <h2 class="section-title">Beruflicher Werdegang</h2>
       <p class="section-subtitle">7+ Jahre in Prozesssicherheit, Anlagenbau und erneuerbaren Gasen.</p>
     </div>
@@ -1310,7 +1495,7 @@ footer {
 <section id="ueber-mich">
   <div class="section-inner">
     <div class="section-head reveal">
-      <p class="section-eyebrow">Über mich</p>
+      <p class="section-eyebrow">§ 07 — Über mich</p>
       <h2 class="section-title">Drei Blickwinkel, eine Bewertung</h2>
     </div>
 
@@ -1355,7 +1540,7 @@ footer {
 <section id="qualifikationen">
   <div class="section-inner">
     <div class="section-head reveal">
-      <p class="section-eyebrow">Kompetenzen</p>
+      <p class="section-eyebrow">§ 08 — Kompetenzen</p>
       <h2 class="section-title">Qualifikationen &amp; Skills</h2>
     </div>
 
@@ -1383,33 +1568,20 @@ footer {
         </ul>
       </div>
 
-      <div class="qual-block reveal reveal-delay-2" style="overflow:hidden;">
+      <div class="qual-block reveal reveal-delay-2">
         <h3>Software &amp; Sprachen</h3>
-        <div class="marquee-wrap">
-          <div class="marquee-track">
-            <span class="skill-tag highlight">Smap P&amp;ID (Key User)</span>
-            <span class="skill-tag highlight">HAZOP/PAAG</span>
-            <span class="skill-tag">AutoCAD</span>
-            <span class="skill-tag">MS Excel</span>
-            <span class="skill-tag">MS Project</span>
-            <span class="skill-tag">PowerPoint</span>
-            <span class="skill-tag highlight">Smap P&amp;ID (Key User)</span>
-            <span class="skill-tag highlight">HAZOP/PAAG</span>
-            <span class="skill-tag">AutoCAD</span>
-            <span class="skill-tag">MS Excel</span>
-            <span class="skill-tag">MS Project</span>
-            <span class="skill-tag">PowerPoint</span>
-          </div>
+        <div class="skills-grid">
+          <span class="skill-tag highlight">Smap P&amp;ID (Key User)</span>
+          <span class="skill-tag highlight">HAZOP/PAAG</span>
+          <span class="skill-tag">AutoCAD</span>
+          <span class="skill-tag">MS Excel</span>
+          <span class="skill-tag">MS Project</span>
+          <span class="skill-tag">PowerPoint</span>
         </div>
-        <div class="marquee-wrap" style="margin-top: 16px;">
-          <div class="marquee-track reverse">
-            <span class="skill-tag highlight">Deutsch (Muttersprache)</span>
-            <span class="skill-tag highlight">Türkisch (Muttersprache)</span>
-            <span class="skill-tag">Englisch (gut)</span>
-            <span class="skill-tag highlight">Deutsch (Muttersprache)</span>
-            <span class="skill-tag highlight">Türkisch (Muttersprache)</span>
-            <span class="skill-tag">Englisch (gut)</span>
-          </div>
+        <div class="skills-grid" style="margin-top: 16px;">
+          <span class="skill-tag highlight">Deutsch (Muttersprache)</span>
+          <span class="skill-tag highlight">Türkisch (Muttersprache)</span>
+          <span class="skill-tag">Englisch (gut)</span>
         </div>
       </div>
 
@@ -1424,66 +1596,61 @@ footer {
 <section id="referenzen">
   <div class="section-inner">
     <div class="section-head reveal">
-      <p class="section-eyebrow">Referenzen</p>
+      <p class="section-eyebrow">§ 09 — Referenzen</p>
       <h2 class="section-title">Ausgewählte Referenzprojekte</h2>
-      <p class="section-subtitle">Projekte anonymisiert dargestellt, soweit Vertraulichkeit des Auftraggebers gilt. Weiterscrollen für mehr →</p>
+      <p class="section-subtitle">Projekte anonymisiert dargestellt, soweit Vertraulichkeit des Auftraggebers gilt.</p>
     </div>
-  </div>
 
-  <div class="hscroll-outer" id="referenzenScroll">
-    <div class="hscroll-sticky">
-      <div class="hscroll-track" id="referenzenTrack">
+    <div class="referenz-grid">
 
-        <div class="referenz-card reveal">
-          <p class="referenz-author">Wasserstoff — Elektrolyseur</p>
-          <p class="referenz-text">Sicherheitstechnische Verantwortung für einen Wasserstoff-Produktionsstandort (Hersteller von Elektrolyseuren): Planung der Sicherheitskonzepte für den gesamten Prozess — von der Elektrolyse über die Sammlung an den Teststationen bis zur Speicherung im Hochdruck-Pufferspeicher. Inkl. Zonierung nach ATEX 2014/34/EU und Abstimmung der Schutzmaßnahmen mit dem Anlagenbetrieb.</p>
-          <div class="referenz-footer">
-            <p class="referenz-company">2021–2023 · Wasserstoffinfrastruktur</p>
-          </div>
+      <div class="referenz-card reveal">
+        <p class="referenz-author">Wasserstoff — Elektrolyseur</p>
+        <p class="referenz-text">Sicherheitstechnische Verantwortung für einen Wasserstoff-Produktionsstandort (Hersteller von Elektrolyseuren): Planung der Sicherheitskonzepte für den gesamten Prozess — von der Elektrolyse über die Sammlung an den Teststationen bis zur Speicherung im Hochdruck-Pufferspeicher. Inkl. Zonierung nach ATEX 2014/34/EU und Abstimmung der Schutzmaßnahmen mit dem Anlagenbetrieb.</p>
+        <div class="referenz-footer">
+          <p class="referenz-company">2021–2023 · Wasserstoffinfrastruktur</p>
         </div>
-
-        <div class="referenz-card reveal">
-          <p class="referenz-author">Wasserstoffverdichtung</p>
-          <p class="referenz-text">HAZOP-Moderation für eine Wasserstoffverdichtungsanlage. Schwerpunkte im Workshop: Leckage- und Freisetzungsszenarien bei hohem Druck, Materialverträglichkeit sowie Explosionsschutz und Zonierung nach ATEX. Ergebnisse dokumentiert nach DIN EN 61882 inkl. Maßnahmenverfolgung.</p>
-          <div class="referenz-footer">
-            <p class="referenz-company">2023–2024 · Wasserstoffinfrastruktur</p>
-          </div>
-        </div>
-
-        <div class="referenz-card reveal">
-          <p class="referenz-author">Biogasaufbereitung (BGAA)</p>
-          <p class="referenz-text">Mehrere HAZOP-Studien für Biogasaufbereitungsanlagen (Aufbereitung zu Bio-Erdgas) an Standorten in verschiedenen europäischen Ländern. Fokus auf Gastrocknung, Druckwechseladsorption und Einspeisequalität nach DVGW-Regelwerk, inkl. SIL-Einstufung sicherheitskritischer Funktionen.</p>
-          <div class="referenz-footer">
-            <p class="referenz-company">2023–2024 · EU-weit</p>
-          </div>
-        </div>
-
-        <div class="referenz-card reveal">
-          <p class="referenz-author">Biogasanlagen international</p>
-          <p class="referenz-text">HAZOP-Moderationen für Biogasanlagen in Deutschland, Frankreich und Dänemark — von der Fermentation bis zur Gasaufbereitung. Besonderer Fokus auf sicherheitsrelevante Schnittstellen zwischen Anlagenteilen unterschiedlicher Hersteller und länderspezifische Regelwerke.</p>
-          <div class="referenz-footer">
-            <p class="referenz-company">2023–2024 · DE · FR · DK</p>
-          </div>
-        </div>
-
-        <div class="referenz-card reveal">
-          <p class="referenz-author">Testanlage Automotive-Bauteil</p>
-          <p class="referenz-text">Sicherheitstechnische Planung einer Testanlage zur Prüfung eines Wasserstoff-Bauteils für den Automotive-Bereich. Gefährdungsbeurteilung für Hochdruck-Testzyklen, Auslegung der Wasserstoffdetektion und Abstimmung der Notfallkonzepte mit dem Prüflabor.</p>
-          <div class="referenz-footer">
-            <p class="referenz-company">2023–2024 · Automotive</p>
-          </div>
-        </div>
-
-        <div class="referenz-card reveal">
-          <p class="referenz-author">Gasinfrastruktur — Netzanschluss</p>
-          <p class="referenz-text">HAZOP-Moderation für eine Biogaseinspeisungsanlage im Rahmen des Netzanschlusses, inkl. Bewertung der Schnittstelle zum vorgelagerten Gasnetz. Begleitend: Prüfung der Genehmigungsunterlagen auf Vollständigkeit nach EnWG und GasNZV.</p>
-          <div class="referenz-footer">
-            <p class="referenz-company">2026 · DACH-Raum</p>
-          </div>
-        </div>
-
       </div>
-      <div class="hscroll-progress"><div class="hscroll-progress-fill" id="referenzenProgressFill"></div></div>
+
+      <div class="referenz-card reveal reveal-delay-1">
+        <p class="referenz-author">Wasserstoffverdichtung</p>
+        <p class="referenz-text">HAZOP-Moderation für eine Wasserstoffverdichtungsanlage. Schwerpunkte im Workshop: Leckage- und Freisetzungsszenarien bei hohem Druck, Materialverträglichkeit sowie Explosionsschutz und Zonierung nach ATEX. Ergebnisse dokumentiert nach DIN EN 61882 inkl. Maßnahmenverfolgung.</p>
+        <div class="referenz-footer">
+          <p class="referenz-company">2023–2024 · Wasserstoffinfrastruktur</p>
+        </div>
+      </div>
+
+      <div class="referenz-card reveal reveal-delay-2">
+        <p class="referenz-author">Biogasaufbereitung (BGAA)</p>
+        <p class="referenz-text">Mehrere HAZOP-Studien für Biogasaufbereitungsanlagen (Aufbereitung zu Bio-Erdgas) an Standorten in verschiedenen europäischen Ländern. Fokus auf Gastrocknung, Druckwechseladsorption und Einspeisequalität nach DVGW-Regelwerk, inkl. SIL-Einstufung sicherheitskritischer Funktionen.</p>
+        <div class="referenz-footer">
+          <p class="referenz-company">2023–2024 · EU-weit</p>
+        </div>
+      </div>
+
+      <div class="referenz-card reveal">
+        <p class="referenz-author">Biogasanlagen international</p>
+        <p class="referenz-text">HAZOP-Moderationen für Biogasanlagen in Deutschland, Frankreich und Dänemark — von der Fermentation bis zur Gasaufbereitung. Besonderer Fokus auf sicherheitsrelevante Schnittstellen zwischen Anlagenteilen unterschiedlicher Hersteller und länderspezifische Regelwerke.</p>
+        <div class="referenz-footer">
+          <p class="referenz-company">2023–2024 · DE · FR · DK</p>
+        </div>
+      </div>
+
+      <div class="referenz-card reveal reveal-delay-1">
+        <p class="referenz-author">Testanlage Automotive-Bauteil</p>
+        <p class="referenz-text">Sicherheitstechnische Planung einer Testanlage zur Prüfung eines Wasserstoff-Bauteils für den Automotive-Bereich. Gefährdungsbeurteilung für Hochdruck-Testzyklen, Auslegung der Wasserstoffdetektion und Abstimmung der Notfallkonzepte mit dem Prüflabor.</p>
+        <div class="referenz-footer">
+          <p class="referenz-company">2023–2024 · Automotive</p>
+        </div>
+      </div>
+
+      <div class="referenz-card reveal reveal-delay-2">
+        <p class="referenz-author">Gasinfrastruktur — Netzanschluss</p>
+        <p class="referenz-text">HAZOP-Moderation für eine Biogaseinspeisungsanlage im Rahmen des Netzanschlusses, inkl. Bewertung der Schnittstelle zum vorgelagerten Gasnetz. Begleitend: Prüfung der Genehmigungsunterlagen auf Vollständigkeit nach EnWG und GasNZV.</p>
+        <div class="referenz-footer">
+          <p class="referenz-company">2026 · DACH-Raum</p>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -1495,14 +1662,14 @@ footer {
 <section id="faq">
   <div class="section-inner">
     <div class="section-head reveal">
-      <p class="section-eyebrow">FAQ</p>
+      <p class="section-eyebrow">§ 10 — FAQ</p>
       <h2 class="section-title">Häufige Fragen</h2>
     </div>
 
     <div class="faq-list reveal">
 
       <div class="faq-item reveal">
-        <button class="faq-question">
+        <button class="faq-question" aria-expanded="false">
           Wie läuft eine HAZOP-Moderation mit Ihnen ab?
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         </button>
@@ -1512,7 +1679,7 @@ footer {
       </div>
 
       <div class="faq-item reveal reveal-delay-1">
-        <button class="faq-question">
+        <button class="faq-question" aria-expanded="false">
           Was muss ich als Auftraggeber für den Workshop vorbereiten?
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         </button>
@@ -1522,7 +1689,7 @@ footer {
       </div>
 
       <div class="faq-item reveal reveal-delay-2">
-        <button class="faq-question">
+        <button class="faq-question" aria-expanded="false">
           Arbeiten Sie remote oder vor Ort?
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         </button>
@@ -1532,7 +1699,7 @@ footer {
       </div>
 
       <div class="faq-item reveal reveal-delay-3">
-        <button class="faq-question">
+        <button class="faq-question" aria-expanded="false">
           Für welche Anlagenarten sind Sie tätig?
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         </button>
@@ -1542,7 +1709,7 @@ footer {
       </div>
 
       <div class="faq-item reveal reveal-delay-4">
-        <button class="faq-question">
+        <button class="faq-question" aria-expanded="false">
           Bieten Sie auch SIL-Verifizierung an?
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         </button>
@@ -1552,7 +1719,7 @@ footer {
       </div>
 
       <div class="faq-item reveal">
-        <button class="faq-question">
+        <button class="faq-question" aria-expanded="false">
           Was kostet eine Zusammenarbeit?
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         </button>
@@ -1571,7 +1738,7 @@ footer {
      ============================================= -->
 <section id="kontakt">
   <div class="section-inner">
-    <p class="section-eyebrow">Kontakt</p>
+    <p class="section-eyebrow">§ 11 — Kontakt</p>
     <h2 class="section-title reveal">Projekt besprechen</h2>
     <p class="section-subtitle reveal">Anfragen zu HAZOP-Mandaten, Projektleitungsaufgaben und R&amp;I-Fließbildern willkommen.</p>
 
@@ -1619,7 +1786,7 @@ footer {
      ============================================= -->
 <section id="impressum" style="background:var(--gray-light); padding:64px 5%;">
   <div class="section-inner" style="max-width:720px;">
-    <p class="section-eyebrow">Impressum</p>
+    <p class="section-eyebrow">§ 12 — Impressum</p>
     <div style="font-family:var(--font); font-size:0.95rem; line-height:1.8; color:var(--gray-dark);">
       <p><strong>Angaben gemäß § 5 DDG</strong></p>
       <p>
@@ -1655,7 +1822,7 @@ footer {
      ============================================= -->
 <section id="datenschutz" style="background:var(--white); padding:64px 5%;">
   <div class="section-inner" style="max-width:720px;">
-    <p class="section-eyebrow">Datenschutz</p>
+    <p class="section-eyebrow">§ 13 — Datenschutz</p>
     <div style="font-family:var(--font); font-size:0.95rem; line-height:1.8; color:var(--gray-dark);">
       <p><strong>Verantwortlicher</strong><br>
         Tamer Yanmaz, Langer Weg 13, 49504 Lotte, <a href="mailto:kontakt@tameryanmaz.com">kontakt@tameryanmaz.com</a>
@@ -1822,10 +1989,11 @@ document.querySelectorAll('.faq-item').forEach(item => {
   question.addEventListener('click', () => {
     const isOpen = answer.classList.contains('open');
     document.querySelectorAll('.faq-answer.open').forEach(a => a.classList.remove('open'));
-    document.querySelectorAll('.faq-question.open').forEach(q => q.classList.remove('open'));
+    document.querySelectorAll('.faq-question.open').forEach(q => { q.classList.remove('open'); q.setAttribute('aria-expanded', 'false'); });
     if (!isOpen) {
       answer.classList.add('open');
       question.classList.add('open');
+      question.setAttribute('aria-expanded', 'true');
     }
   });
 });
@@ -1866,41 +2034,6 @@ document.querySelectorAll('.btn-primary, .btn-secondary').forEach(btn => {
   });
 });
 
-/* --------------------------------------------------
-   9. HORIZONTALES SCROLL-PANEL — Referenzen
-   -------------------------------------------------- */
-const hOuter = document.getElementById('referenzenScroll');
-const hTrack = document.getElementById('referenzenTrack');
-const hFill = document.getElementById('referenzenProgressFill');
-const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-if (hOuter && hTrack && !reduceMotion) {
-  // Übersetzung ist schon nach 82% des Pin-Bereichs fertig — die restlichen
-  // 18% bleibt die letzte Kachel voll sichtbar stehen, bevor die Seite
-  // weiterscrollt (verhindert abgeschnittene letzte Kachel).
-  const FINISH_AT = 0.82;
-
-  function updateHScroll() {
-    if (window.innerWidth <= 768) {
-      hTrack.style.transform = '';
-      if (hFill) hFill.style.width = '0%';
-      return;
-    }
-    const rect = hOuter.getBoundingClientRect();
-    const total = hOuter.offsetHeight - window.innerHeight;
-    if (total <= 0) return;
-    let raw = -rect.top / total;
-    raw = Math.max(0, Math.min(1, raw));
-    const progress = Math.max(0, Math.min(1, raw / FINISH_AT));
-    const maxTranslate = Math.max(hTrack.scrollWidth - window.innerWidth, 0);
-    hTrack.style.transform = `translateX(-${progress * maxTranslate}px)`;
-    if (hFill) hFill.style.width = (progress * 100) + '%';
-  }
-
-  window.addEventListener('scroll', updateHScroll, { passive: true });
-  window.addEventListener('resize', updateHScroll);
-  updateHScroll();
-}
 </script>
 
 </body>
